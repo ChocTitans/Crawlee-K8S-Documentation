@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crawlee-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crawlee-app
+  template:
+    spec:
+      containers:
+      - name: crawlee-app
+        image: 230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:$CRAWLEE_IMAGE_VERSION
+        ports:
+        - containerPort: 5000
+        env:
+        - name: AWS_S3_BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: crawlee-app-config
+              key: aws-bucket-name
+        - name: AWS_S3_BUCKET_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: crawlee-app-config
+              key: aws-bucket-region
+        - name: AWS_S3_ACCESS_KEY
+          valueFrom:
+            secretKeyRef: 
+              name: crawlee-app-secret
+              key: aws-access-key
+        - name: AWS_S3_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: crawlee-app-secret
+              key: aws-secret-key
+      imagePullSecrets:
+        - name: ecr-registry-secret

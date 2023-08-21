@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namePrefix: app-
+metadata:
+  name: crawlee-ressources
+commonLabels:
+  app: crawlee
+
+resources:
+- ./base
+
+secretGenerator:
+- name: crawlee-app-secret
+  envs:
+  - secret.env
+
+configMapGenerator:
+- name: crawlee-app-config
+  envs:
+  - configmap.env
