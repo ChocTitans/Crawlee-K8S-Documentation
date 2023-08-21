@@ -59,7 +59,5 @@ jobs:
           
       - name: Kustomize build & apply
         run: |
-          kustomize build . | kubectl delete -f - || true
-          sleep 5
           kustomize build . | kubectl apply -f -
           
