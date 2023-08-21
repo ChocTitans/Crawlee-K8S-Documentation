@@ -10,11 +10,11 @@ resources:
 - ./base
 
 secretGenerator:
-- name: crawlee-app-secret
+- name: crawlee-secret
   envs:
   - secret.env
 
 configMapGenerator:
-- name: crawlee-app-config
+- name: crawlee-config
   envs:
   - configmap.env

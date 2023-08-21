@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: crawlee-app-service
+  name: crawlee-service
 spec:
   selector:
-    app.kubernetes.io/name: crawlee-app
+    app.kubernetes.io/name: crawlee
   ports:
     - protocol: TCP
       port: 5000

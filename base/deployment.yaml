@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: crawlee-app-deployment
+  name: crawlee
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: crawlee-app
+      app: crawlee
   template:
     spec:
       containers:
@@ -18,22 +18,22 @@ spec:
         - name: S3_BUCKET_NAME
           valueFrom:
             configMapKeyRef:
-              name: crawlee-app-config
+              name: crawlee-config
               key: aws_bucket_name
         - name: S3_BUCKET_REGION
           valueFrom:
             configMapKeyRef:
-              name: crawlee-app-config
+              name: crawlee-config
               key: aws_bucket_region
         - name: S3_ACCESS_KEY
           valueFrom:
             secretKeyRef: 
-              name: crawlee-app-secret
+              name: crawlee-secret
               key: crawlee_aws_access_key
         - name: S3_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: crawlee-app-secret
+              name: crawlee-secret
               key: crawlee_aws_secret_key
       imagePullSecrets:
         - name: ecr-registry-secret
