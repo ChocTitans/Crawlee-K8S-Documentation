@@ -29,11 +29,11 @@ spec:
           valueFrom:
             secretKeyRef: 
               name: crawlee-secret
-              key: crawlee_aws_access_key
+              key: CRAWLEE_AWS_ACCESS_KEY
         - name: S3_SECRET_KEY
           valueFrom:
             secretKeyRef:
               name: crawlee-secret
-              key: crawlee_aws_secret_key
+              key: CRAWLEE_AWS_SECRET_KEY
       imagePullSecrets:
         - name: ecr-registry-secret
