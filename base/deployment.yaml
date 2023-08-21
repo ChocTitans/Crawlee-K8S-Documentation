@@ -15,25 +15,25 @@ spec:
         ports:
         - containerPort: 5000
         env:
-        - name: AWS_S3_BUCKET_NAME
+        - name: S3_BUCKET_NAME
           valueFrom:
             configMapKeyRef:
               name: crawlee-app-config
-              key: aws-bucket-name
-        - name: AWS_S3_BUCKET_REGION
+              key: aws_bucket_name
+        - name: S3_BUCKET_REGION
           valueFrom:
             configMapKeyRef:
               name: crawlee-app-config
-              key: aws-bucket-region
-        - name: AWS_S3_ACCESS_KEY
+              key: aws_bucket_region
+        - name: S3_ACCESS_KEY
           valueFrom:
             secretKeyRef: 
               name: crawlee-app-secret
-              key: aws-access-key
-        - name: AWS_S3_SECRET_KEY
+              key: crawlee_aws_access_key
+        - name: S3_SECRET_KEY
           valueFrom:
             secretKeyRef:
               name: crawlee-app-secret
-              key: aws-secret-key
+              key: crawlee_aws_secret_key
       imagePullSecrets:
         - name: ecr-registry-secret
