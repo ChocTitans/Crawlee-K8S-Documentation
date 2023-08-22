@@ -11,29 +11,27 @@ spec:
     spec:
       containers:
       - name: crawlee-app
-        image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:$CRAWLEE_IMAGE_VERSION"
+        image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:v1.0"
         ports:
         - containerPort: 5000
         env:
-        - name: S3_BUCKET_NAME
+        - name: AWS_S3_BUCKET_NAME
           valueFrom:
             configMapKeyRef:
-              name: crawlee-config
-              key: aws_bucket_name
-        - name: S3_BUCKET_REGION
+              name: crawlee-app-config
+              key: aws-bucket-name
+        - name: AWS_S3_BUCKET_REGION
           valueFrom:
             configMapKeyRef:
-              name: crawlee-config
-              key: aws_bucket_region
-        - name: S3_ACCESS_KEY
+              name: crawlee-app-config
+              key: aws-bucket-region
+        - name: AWS_S3_ACCESS_KEY
           valueFrom:
             secretKeyRef: 
-              name: crawlee-secret
-              key: CRAWLEE_AWS_ACCESS_KEY
-        - name: S3_SECRET_KEY
+              name: crawlee-app-secret
+              key: crawlee_access_key
+        - name: AWS_S3_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: crawlee-secret
-              key: CRAWLEE_AWS_SECRET_KEY
-      imagePullSecrets:
-        - name: ecr-registry-secret
+              name: crawlee-app-secret
+              key: crawlee_secret_key
