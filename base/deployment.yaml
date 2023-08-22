@@ -29,9 +29,9 @@ spec:
           valueFrom:
             secretKeyRef: 
               name: crawlee-app-secret
-              key: crawlee_access_key
+              key: CRAWLEE_ACCESS_KEY
         - name: AWS_S3_SECRET_KEY
           valueFrom:
             secretKeyRef:
               name: crawlee-app-secret
-              key: crawlee_secret_key
+              key: CRAWLEE_SECRET_KEY
