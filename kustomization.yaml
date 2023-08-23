@@ -9,10 +9,6 @@ commonLabels:
 resources:
 - ./base
 
-secretGenerator:
-- name: crawlee-app-secret
-  envs:
-  - secret.env
 
 configMapGenerator:
 - name: crawlee-app-config

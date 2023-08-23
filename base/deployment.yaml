@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: crawlee-app
-        image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:v1.0"
+        image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:$CRAWLEE_IMAGE_VERSION"
         ports:
         - containerPort: 5000
         env:
