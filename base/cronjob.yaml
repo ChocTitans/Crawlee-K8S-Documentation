@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: crawlee
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: crawlee-app
+            image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:LTS"
+            args:
+            - /bin/sh
+            - -c
+            - echo $(date)
+            env:
+            - name: AWS_S3_BUCKET_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: crawlee-app-config
+                  key: aws-bucket-name
+            - name: AWS_S3_BUCKET_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: crawlee-app-config
+                  key: aws-bucket-region
+            - name: AWS_S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef: 
+                  name: crawlee-app-secret
+                  key: CRAWLEE_ACCESS_KEY
+            - name: AWS_S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: crawlee-app-secret
+                  key: CRAWLEE_SECRET_KEY   
+          restartPolicy: OnFailure
