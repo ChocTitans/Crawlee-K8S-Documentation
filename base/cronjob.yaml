@@ -11,10 +11,6 @@ spec:
           containers:
           - name: crawlee-app
             image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:LTS"
-            args:
-            - /bin/sh
-            - -c
-            - echo $(date)
             env:
             - name: AWS_S3_BUCKET_NAME
               valueFrom:
