@@ -53,8 +53,8 @@ jobs:
       - name: Update Crawlee-app Image
         run: |
           export CRAWLEE_IMAGE_VERSION=${{ vars.CRAWLEE_IMAGE_VERSION }}
-          envsubst < ./base/deployment.yaml > ./base/deployment_updated.yaml
-          mv ./base/deployment_updated.yaml ./base/deployment.yaml
+          envsubst < ./base/cronjob.yaml > ./base/cronjob_updated.yaml
+          mv ./base/cronjob_updated.yaml ./base/cronjob.yaml
           
       - name: Kustomize build & apply
         run: |
