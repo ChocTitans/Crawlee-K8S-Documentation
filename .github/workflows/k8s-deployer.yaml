@@ -52,7 +52,7 @@ jobs:
                     
       - name: Update Crawlee-app Image
         run: |
-          export CRAWLEE_IMAGE_VERSION=${{ vars.CRAWLEE_IMAGE_VERSION }}
+          export IMAGE_VERSION=${{ vars.IMAGE_VERSION }}
           envsubst < ./base/cronjob.yaml > ./base/cronjob_updated.yaml
           mv ./base/cronjob_updated.yaml ./base/cronjob.yaml
           
