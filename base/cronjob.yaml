@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: crawlee
 spec:
-  schedule: "0 0 * * 0"
+  schedule: "* * * * *"
   jobTemplate:
     spec:
       template:
@@ -11,6 +11,10 @@ spec:
           containers:
           - name: crawlee-app
             image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:$IMAGE_VERSION"
+            ports:
+              - name: http
+                containerPort: 3333
+                protocol: TCP
             env:
             - name: AWS_S3_BUCKET_NAME
               valueFrom:
