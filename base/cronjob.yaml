@@ -16,7 +16,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: crawlee-app-config
-                  key: aws-bucket-name
+                  key: AWS_S3_BUCKET_NAME
             - name: AWS_DYNAMODB_EXPORTS_TABLE_NAME
               valueFrom:
                 configMapKeyRef:
@@ -31,7 +31,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: crawlee-app-config
-                  key: aws-bucket-region
+                  key: AWS_REGION
             - name: AWS_S3_ACCESS_KEY
               valueFrom:
                 secretKeyRef: 
