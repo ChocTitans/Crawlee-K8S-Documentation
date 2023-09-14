@@ -27,7 +27,7 @@ spec:
                 configMapKeyRef:
                   name: crawlee-app-config
                   key: AWS_DYNAMODB_FAILED_TABLE_NAME
-            - name: AWS_S3_BUCKET_REGION
+            - name: AWS_REGION
               valueFrom:
                 configMapKeyRef:
                   name: crawlee-app-config
