@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crawlee-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: crawlee-postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: crawlee-postgres
+    spec:
+      containers:
+        - env:
+            - name: PGDATA
+              value: /data/postgres/new
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: crawlee-app-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: crawlee-app-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: crawlee-app-secret
+                  key: POSTGRES_USER
+          image: postgres:14.0-alpine
+          name: crawlee-db
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /data/postgres
+              name: crawlee-postgres-pvc
+      restartPolicy: Always
+      volumes:
+        - name: crawlee-postgres-pvc
+          persistentVolumeClaim:
+            claimName: crawlee-postgres-pvc
