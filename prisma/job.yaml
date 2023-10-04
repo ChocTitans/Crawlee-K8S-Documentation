@@ -7,6 +7,10 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: busybox:1.32
+          command: ["sh", "-c", "until nslookup app-crawlee-postgres && nc -z -v -w 2 app-crawlee-postgres 5432; do sleep 1; done"]
       containers:
         - name: migrate-database
           image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/prisma-cli:latest"
@@ -16,5 +20,5 @@ spec:
               secretKeyRef:
                 name: crawlee-app-secret
                 key: DATABASE_URL
-      restartPolicy: OnFailure
+      restartPolicy: Never
   backoffLimit: 1
