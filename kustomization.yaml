@@ -7,7 +7,6 @@ commonLabels:
   app: crawlee
 
 resources:
-- ./base
 - ./postgres
 
 secretGenerator:
