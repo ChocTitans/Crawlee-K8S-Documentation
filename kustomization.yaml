@@ -8,6 +8,7 @@ commonLabels:
 
 resources:
 - ./base
+- ./postgres
 
 secretGenerator:
 - name: crawlee-app-secret
