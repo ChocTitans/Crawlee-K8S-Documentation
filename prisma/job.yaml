@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: migrate-database
-          image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/prisma-cli:v1.1"
+          image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/prisma-cli:latest"
           env:
           - name: DATABASE_URL
             valueFrom:
