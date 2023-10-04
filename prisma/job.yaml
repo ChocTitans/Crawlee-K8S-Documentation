@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: prisma-migrate
+  labels:
+    app.kubernetes.io/name: prisma
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate-database
+          image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/prisma-cli:v1.0"
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: crawlee-app-secret
+                key: DATABASE_URL
+      restartPolicy: Never
+  backoffLimit: 1
