@@ -17,16 +17,6 @@ spec:
                 configMapKeyRef:
                   name: crawlee-app-config
                   key: AWS_S3_BUCKET_NAME
-            - name: AWS_DYNAMODB_EXPORTS_TABLE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: crawlee-app-config
-                  key: AWS_DYNAMODB_EXPORTS_TABLE_NAME
-            - name: AWS_DYNAMODB_FAILED_TABLE_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: crawlee-app-config
-                  key: AWS_DYNAMODB_FAILED_TABLE_NAME
             - name: AWS_REGION
               valueFrom:
                 configMapKeyRef:
@@ -41,5 +31,10 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: crawlee-app-secret
-                  key: CRAWLEE_SECRET_KEY   
+                  key: CRAWLEE_SECRET_KEY
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: crawlee-app-secret
+                  key: DATABASE_URL
           restartPolicy: OnFailure
