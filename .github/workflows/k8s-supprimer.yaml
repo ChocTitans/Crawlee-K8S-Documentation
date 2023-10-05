@@ -1,58 +1,54 @@
 name: Workflow for Suppression in K8S
-on:
-  workflow_dispatch:
+on: 
+    workflow_dispatch:
 jobs:
-  build:
+  setup_config_secret:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
 
-    - name: update kube config
-      shell: bash
-      run: aws eks update-kubeconfig --name ${{ vars.AWS_NAME_CLUSTER }} --region ${{ vars.AWS_REGION }}
-        
-    - name: Install kustomize
-      shell: bash
-      run: |
-        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
-        sudo mv kustomize /usr/local/bin/
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name ${{ vars.AWS_NAME_CLUSTER }} --region ${{ vars.AWS_REGION }}
 
-    - name: Update Crawlee Image
-      run: |
-        export IMAGE_VERSION=${{ vars.IMAGE_VERSION }}
-        envsubst < ./base/cronjob.yaml > ./base/cronjob_updated.yaml
-        mv ./base/cronjob_updated.yaml ./base/cronjob.yaml
+      - name: Install kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+          sudo mv kustomize /usr/local/bin/
 
-    - name: Create Secret file
-      shell: bash
-      run: |
-        for secret in $(echo "$SECRETS" | jq -r 'keys[]'); do
-          if [[ "$secret" != "github_token" && ! "$secret" =~ ^AWS_ ]]; then
-            value="$(jq -r --arg key "$secret" '.[$key]' <<< "$SECRETS")"
-            echo "$secret=$value" >> secret.env
-          fi
-        done
+      - name: Create Secret file
+        env:
+          SECRETS: '${{ toJson(secrets) }}'
+        run: |
+          for secret in $(echo "$SECRETS" | jq -r 'keys[]'); do
+            if [[ "$secret" != "github_token" && ! "$secret" =~ ^AWS_ ]]; then
+              value="$(jq -r --arg key "$secret" '.[$key]' <<< "$SECRETS")"
+              echo "$secret=$value" >> secret.env
+            fi
+          done
           if [[ ! -s secret.env ]]; then
             echo "Error: secrets.env is empty"
           fi
+    
+      - name: Append Github Vars to ConfigMap
+        env:
+          VARS: '${{ toJson(vars) }}'
+        run: |
+          for vars in $(echo "$VARS" | jq -r 'keys[]'); do
+            if [[ ! "$vars" =~ ^AWS_ ]]; then
+              value="$(jq -r --arg key "$vars" '.[$key]' <<< "$VARS")"
+              echo -e "\n$vars=$value" >> configmap.env
+            fi
+          done
 
-    - name: Append Github Vars to ConfigMap
-      shell: bash
-      run: |
-        for vars in $(echo "$VARS" | jq -r 'keys[]'); do
-          if [[ ! "$vars" =~ ^AWS_ ]]; then
-            value="$(jq -r --arg key "$vars" '.[$key]' <<< "$VARS")"
-            echo -e "\n$vars=$value" >> configmap.env
-          fi
-        done        
-
-    - name: Kustomize build & apply
-      run: |
-        kustomize build . | kubectl delete -f -
+      - name: Kustomize build & apply
+        run: |
+          kustomize build . | kubectl delete -f -
