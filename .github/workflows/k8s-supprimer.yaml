@@ -10,7 +10,6 @@ jobs:
     - name: Set up AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        # Actions can't access to secrets so passing them in as inputs
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ vars.AWS_REGION }}
@@ -32,6 +31,7 @@ jobs:
         mv ./base/cronjob_updated.yaml ./base/cronjob.yaml
 
     - name: Create Secret file
+      shell: bash
       run: |
         for secret in $(echo "$SECRETS" | jq -r 'keys[]'); do
           if [[ "$secret" != "github_token" && ! "$secret" =~ ^AWS_ ]]; then
@@ -44,6 +44,7 @@ jobs:
           fi
 
     - name: Append Github Vars to ConfigMap
+      shell: bash
       run: |
         for vars in $(echo "$VARS" | jq -r 'keys[]'); do
           if [[ ! "$vars" =~ ^AWS_ ]]; then
