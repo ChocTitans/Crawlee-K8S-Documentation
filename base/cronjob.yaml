@@ -8,10 +8,6 @@ spec:
     spec:
       template:
         spec:
-          initContainers:
-            - name: wait-for-postgres
-              image: busybox:1.32
-              command: ["sh", "-c", "until nc -z -v app-crawlee-postgres 5432; do sleep 1; done"]
           containers:
           - name: crawlee-app
             image: "230410870031.dkr.ecr.eu-west-3.amazonaws.com/crawlee-app:$IMAGE_VERSION"
